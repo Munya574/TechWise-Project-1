@@ -12,18 +12,18 @@ class InputManager:
 
     def run(self):
         while self.running:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                    if event.key == K_UP:
-                        self.move_up()
-                    if event.key == K_DOWN:
-                        self.move_down()
-                    if event.key == K_LEFT:
-                        self.move_left()
-                    if event.key == K_RIGHT:
-                        self.move_right()
-                if event.type == QUIT:
-                    self.running = False
+
+            keys = pygame.key.get_pressed()
+            if keys[K_UP]:
+                self.move_up()
+            if keys[K_DOWN]:
+                self.move_up()
+            if keys[K_LEFT]:
+                self.move_left()
+            if keys[K_RIGHT]:
+                self.move_right()
+            if keys[QUIT]:
+                self.running = False
                     
 
     def move_up(self):
