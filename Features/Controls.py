@@ -1,4 +1,5 @@
 import pygame
+import math
 from pygame.locals import *
 from Tank import Player
 
@@ -10,38 +11,54 @@ class InputManager:
         self.y = 300
         self.direction = None
 
-    def run(self):
+pos = pygame.mouse.get_pos()
+
+x_dist = pos[0] - x
+y_dist = -(pos[1]-y)
+angle = math.degrees(math.atan2(y_dist, x_dist))
+
+turret = pygame.transform.rotate(self.player, angle - 90)
+turret_rect = turret.get_rect(center = (x, y))
+
+screen.blit(turret, turret_rect)
+
+def run(self, keys):
         while self.running:
 
-            keys = pygame.key.get_pressed()
-            if keys[K_UP]:
-                self.move_up()
-            if keys[K_DOWN]:
-                self.move_up()
-            if keys[K_LEFT]:
-                self.move_left()
-            if keys[K_RIGHT]:
-                self.move_right()
+            if keys[pygame.K_UP]:
+                self.player.rect.y -= 5
+            if keys[pygame.K_DOWN]:
+                self.player.rect.y += 5
+            if keys[pygame.K_LEFT]:
+                self.player.rect.x -= 5
+            if keys[pygame.K_RIGHT]:
+                self.player.rect.x += 5
+            if keys[pygame.K_SPACE]:
+                if not self.space_pressed:
+                    self.shoot()
+                    self.space_pressed = True
+                else:
+                    self.space_pressed = False
             if keys[QUIT]:
                 self.running = False
                     
 
-    def move_up(self):
-        self.direction = "up"
-        self.y -= 5  
-        self.update_player_position()
+    # def move_up(self):
+    #     self.direction = "up"
+    #     self.y -= 5  
+    #     self.update_player_position()
         
-    def move_down(self):
-        self.direction = "down"
-        self.y += 5
-        self.update_player_position()
+    # def move_down(self):
+    #     self.direction = "down"
+    #     self.y += 5
+    #     self.update_player_position()
 
-    def move_left(self):
-        self.direction = "left"
-        self.x -= 5
-        self.update_player_position()
+    # def move_left(self):
+    #     self.direction = "left"
+    #     self.x -= 5
+    #     self.update_player_position()
 
-    def move_right(self):
-        self.direction = "right"
-        self.x += 5
-        self.update_player_position()
+    # def move_right(self):
+    #     self.direction = "right"
+    #     self.x += 5
+    #     self.update_player_position()
