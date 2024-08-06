@@ -1,8 +1,8 @@
 import pygame
 from Tank import Player
-from Bullets import Bullet
+#from Bullets import Bullet
 from Controls import InputManager
-#from Obstacles import Obstacles
+from Obstacles import Obstacles
 
 class Game:
     def __init__(self):
@@ -14,7 +14,7 @@ class Game:
 
         self.player = Player()
         self.bullets = []
-        #self.obstacles = Obstacles()
+        self.obstacles = Obstacles()
         self.input = InputManager(self.player, self.bullets)
 
     def run(self):
