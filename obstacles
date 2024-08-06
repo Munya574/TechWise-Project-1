@@ -1,0 +1,49 @@
+import pygame
+import sys
+
+# Initializing pygame
+pygame.init()
+
+# Screen dimensions
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("4_Obstacles")
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+GRAY = (169, 169, 169)
+BROWN = (139, 69, 19)
+
+# Obstacle settings
+obstacle_width = 50
+obstacle_height = 50
+
+# Obstacles list with colors and positions
+obstacles = [
+    (pygame.Rect(SCREEN_WIDTH // 2 - obstacle_width // 2, 200, obstacle_width, obstacle_height), GREEN),
+    (pygame.Rect(SCREEN_WIDTH // 2 - obstacle_width // 2, 300, obstacle_width, obstacle_height), GRAY),
+    (pygame.Rect(SCREEN_WIDTH // 2 - obstacle_width // 2, 400, obstacle_width, obstacle_height), BROWN)
+]
+
+# Main game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Clear screen
+    screen.fill(BLACK)
+
+    # Draw obstacles
+    for obstacle, color in obstacles:
+        pygame.draw.rect(screen, color, obstacle)
+
+    pygame.display.flip()
+    pygame.time.Clock().tick(30)
+
+pygame.quit()
+sys.exit()
