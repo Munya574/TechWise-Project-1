@@ -1,66 +1,36 @@
 import pygame
-import math
-from pygame.locals import *
-from Tank import Player
+from Bullets import Bullet
 
 class InputManager:
-    def __init__(self, player: Player) -> None:
-        self.running = True
+    def __init__(self, player, bullets):
         self.player = player
         self.bullets = bullets
-        self.x = 400
-        self.y = 300
-        self.direction = None
-
-
-def rotation(self):
-    pos = pygame.mouse.get_pos()
-
-    x_dist = pos[0] - self.rect.centerx
-    y_dist = -(pos[1]-self.rect.centery)
-    angle = math.degrees(math.atan2(y_dist, x_dist))
-
-    turret = pygame.transform.rotate(self.player, angle - 90)
-    turret_rect = turret.get_rect(center = (self.rect.centerx, self.rect.centerx))
-
-    self.screen.blit(turret, turret_rect)
-
-def input(self, keys):
-    if keys[pygame.K_UP]:
-        self.player.rect.y -= 5
-    if keys[pygame.K_DOWN]:
-        self.player.rect.y += 5
-    if keys[pygame.K_LEFT]:
-        self.player.rect.x -= 5
-    if keys[pygame.K_RIGHT]:
-        self.player.rect.x += 5
-    if keys[pygame.K_SPACE]:
-        if not self.space_pressed:
-            self.shoot()
-            self.space_pressed = True
-    else:
+        self.bullet_image_path = 'yellow_bullet.png'
         self.space_pressed = False
-    if keys[QUIT]:
-        self.running = False
-                    
 
-
-    # def move_up(self):
-    #     self.direction = "up"
-    #     self.y -= 5  
-    #     self.update_player_position()
+    def handle_input(self, keys):
+        if keys[pygame.K_LEFT]:
+            self.player.set_direction('left')
+            self.player.move()
+        elif keys[pygame.K_RIGHT]:
+            self.player.set_direction('right')
+            self.player.move()
+        elif keys[pygame.K_UP]:
+            self.player.set_direction('up')
+            self.player.move()
+        elif keys[pygame.K_DOWN]:
+            self.player.set_direction('down')
+            self.player.move()
         
-    # def move_down(self):
-    #     self.direction = "down"
-    #     self.y += 5
-    #     self.update_player_position()
+        if keys[pygame.K_SPACE]:
+            if not self.space_pressed:
+                self.shoot()
+                self.space_pressed = True
+        else:
+            self.space_pressed = False
 
-    # def move_left(self):
-    #     self.direction = "left"
-    #     self.x -= 5
-    #     self.update_player_position()
-
-    # def move_right(self):
-    #     self.direction = "right"
-    #     self.x += 5
-    #     self.update_player_position()
+    def shoot(self):
+        player_x, player_y = self.player.get_position()
+        direction = self.player.direction
+        bullet = Bullet(player_x, player_y, 5, direction, self.bullet_image_path)
+        self.bullets.append(bullet)
