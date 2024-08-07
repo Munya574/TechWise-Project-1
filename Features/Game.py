@@ -2,6 +2,7 @@ import pygame
 from Tank import Player
 from Bullets import Bullet
 from Controls import InputManager
+from Enemy import Enemy
 
 class Game:
     def __init__(self):
@@ -13,6 +14,7 @@ class Game:
 
         self.player = Player()
         self.bullets = []
+        self.enemy = Enemy()
         self.input_manager = InputManager(self.player, self.bullets)
 
     def run(self):
@@ -31,6 +33,7 @@ class Game:
 
             self.screen.fill((0, 0, 0))
             self.player.draw(self.screen)
+            self.enemy.draw(self.screen)
             for bullet in self.bullets:
                 bullet.draw(self.screen)
 
