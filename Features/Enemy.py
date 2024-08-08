@@ -6,6 +6,8 @@ class Enemy:
         self.image = pygame.image.load('enemy.png')
         self.rect = self.image.get_rect()
         self.rect.bottomright = (400, 300)
+        self.size = (70,50)
+        self.image = pygame.transform.scale(self.image, self.size)
         self.move_count = 0
         self.angle = 0
         self.clock = pygame.time.Clock()  
