@@ -14,18 +14,18 @@ class Enemy:
         screen.blit(self.image, self.rect)
 
     def update(self):
-        self.clock.tick(60)  
+        self.clock.tick(80)  
         print(self.angle)
         if self.move_count > 0:
             self.move_count -= 1
             if self.angle == 0:
-                self.rect.x += 3
+                self.rect.x += 2
             elif self.angle == 90:
-                self.rect.y -= 3
+                self.rect.y -= 2
             elif self.angle == 180:
-                self.rect.x -= 3
+                self.rect.x -= 2
             elif self.angle == 270:
-                self.rect.y += 3
+                self.rect.y += 2
         else:
             self.choose_new_direction()
 
