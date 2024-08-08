@@ -24,6 +24,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
+            self.enemy.update()
+
             keys = pygame.key.get_pressed()
             self.input_manager.handle_input(keys)
             for bullet in self.bullets:

@@ -3,32 +3,32 @@ import random
 
 class Enemy:
     def __init__(self):
-       self.image = pygame.image.load('enemy.png') 
-       self.rect = self.image.get_rect()
-       self.rect.bottomright = (400,300)
-       self.move_count = 0
-    
+        self.image = pygame.image.load('enemy.png')
+        self.rect = self.image.get_rect()
+        self.rect.bottomright = (400, 300)
+        self.move_count = 0
+        self.angle = 0
+        self.clock = pygame.time.Clock()  
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
     def update(self):
-        choice = random.randint(0,2)
+        self.clock.tick(60)  
+        print(self.angle)
         if self.move_count > 0:
-            self.move_count = self.move_count - 1
+            self.move_count -= 1
             if self.angle == 0:
-                self.x += 3
-            if self.angle == 90:
-                self.y -= 3
-            if self.angle == 180:
-                self.x -= 3
-            if self.angle == 270:
-                self.y += 3
-        if choice == 0:
-            self.move_count = 20
-        if choice == 1:
-            self.angle = random.randint(0,3) * 90
+                self.rect.x += 3
+            elif self.angle == 90:
+                self.rect.y -= 3
+            elif self.angle == 180:
+                self.rect.x -= 3
+            elif self.angle == 270:
+                self.rect.y += 3
         else:
-            #need to add shooting
-            pass 
+            self.choose_new_direction()
 
-    
+    def choose_new_direction(self):
+        self.move_count = 20  
+        self.angle = random.randint(0, 3) * 90
