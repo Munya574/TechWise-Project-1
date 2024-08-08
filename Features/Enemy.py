@@ -10,7 +10,7 @@ class Enemy:
         self.image = pygame.transform.scale(self.image, self.size)
         self.move_count = 0
         self.angle = 0
-        self.clock = pygame.time.Clock()  
+        self.clock = pygame.time.Clock()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
