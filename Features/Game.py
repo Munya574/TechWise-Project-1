@@ -16,6 +16,7 @@ class Game:
         self.bullets = []
         self.enemy = Enemy()
         self.input_manager = InputManager(self.player, self.bullets)
+        self.font = pygame.font.Font(None, 74)
 
     def run(self):
         running = True
@@ -25,6 +26,7 @@ class Game:
                     running = False
 
             self.enemy.update()
+            self.check_collisions()
 
             keys = pygame.key.get_pressed()
             self.input_manager.handle_input(keys)
@@ -32,6 +34,9 @@ class Game:
                 bullet.update()
                 if bullet.off_screen(self.width, self.height):
                     self.bullets.remove(bullet)
+                elif bullet.collides_w_enemy(self.enemy):
+                    self.bullets.remove(bullet)
+                    #add damage to enemy tank here
 
             self.screen.fill((0, 0, 0))
             self.player.draw(self.screen)
@@ -44,6 +49,16 @@ class Game:
 
         pygame.quit()
         raise SystemExit
+    
+    def check_collisions(self):
+        if self.player.rect.colliderect(self.enemy.rect):
+            game_over_text = self.font.render('Game Over', True, (255, 255, 255))
+            self.screen.blit(game_over_text, (260, 250))
+
+            pygame.display.flip()
+            pygame.time.wait(2000)
+            pygame.quit()
+            raise SystemExit
 
 if __name__ == '__main__':
     game = Game()
