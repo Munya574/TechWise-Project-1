@@ -3,7 +3,7 @@ import math
 
 class Player:
     def __init__(self):
-        self.image = pygame.image.load('pic.png')
+        self.image = pygame.image.load('images/pic.png')
         self.rect = self.image.get_rect()
         self.rect.topleft = (400, 300)
         self.direction = 'up' 

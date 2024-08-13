@@ -3,7 +3,7 @@ import random
 
 class Enemy:
     def __init__(self):
-        self.original_image = pygame.image.load('enemy.png') 
+        self.original_image = pygame.image.load('images/enemy.png') 
         self.size = (70, 50) 
         self.original_image = pygame.transform.scale(self.original_image, self.size)
         

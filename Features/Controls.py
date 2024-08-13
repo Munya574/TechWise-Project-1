@@ -5,7 +5,7 @@ class InputManager:
     def __init__(self, player, bullets):
         self.player = player
         self.bullets = bullets
-        self.bullet_image_path = 'yellow_bullet.png'
+        self.bullet_image_path = 'images/yellow_bullet.png'
         self.space_pressed = False
 
     def handle_input(self, keys):
