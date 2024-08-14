@@ -13,9 +13,10 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.player = Player()
-        self.bullets = []
+        self.player_bullets = []
         self.enemy = Enemy()
-        self.input_manager = InputManager(self.player, self.bullets)
+        self.enemy_bullets = self.enemy.bullets
+        self.input_manager = InputManager(self.player, self.player_bullets)
         self.font = pygame.font.Font(None, 74)
 
     def run(self):
@@ -25,30 +26,35 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            self.enemy.update()
-            self.check_collisions()
-
             keys = pygame.key.get_pressed()
             self.input_manager.handle_input(keys)
-            for bullet in self.bullets:
-                bullet.update()
-                if bullet.off_screen(self.width, self.height):
-                    self.bullets.remove(bullet)
-                elif bullet.collides_w_enemy(self.enemy):
-                    self.bullets.remove(bullet)
-                    #add damage to enemy tank here
-
+            
+            self.enemy.update(self.player)
+            self.check_collisions()
             self.screen.fill((0, 0, 0))
             self.player.draw(self.screen)
             self.enemy.draw(self.screen)
-            for bullet in self.bullets:
-                bullet.draw(self.screen)
+
+            self.update_bullets(self.player_bullets, self.enemy)
+            self.update_bullets(self.enemy_bullets, self.player)
 
             pygame.display.flip()
             self.clock.tick(60)
 
         pygame.quit()
         raise SystemExit
+
+    def update_bullets(self, bullets, target):
+        for bullet in bullets[:]:
+            bullet.update()
+            if bullet.off_screen(self.width, self.height):
+                bullets.remove(bullet)
+            elif bullet.collides_with(target):
+                bullets.remove(bullet)
+                # Add damage to target here
+
+        for bullet in bullets:
+            bullet.draw(self.screen)
     
     def check_collisions(self):
         if self.player.rect.colliderect(self.enemy.rect):

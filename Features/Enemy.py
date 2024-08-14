@@ -1,5 +1,8 @@
 import pygame
 import random
+from Bullets import Bullet
+from Tank import Player
+import math
 
 class Enemy:
     def __init__(self):
@@ -18,41 +21,45 @@ class Enemy:
         self.angle = 0
         self.clock = pygame.time.Clock()
 
+        self.bullets = []
+        self.shoot_delay = 800
+        self.last_shot_time = pygame.time.get_ticks()
+        self.shoot_range = 200 # Distance to player
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        for bullet in self.bullets:
+            bullet.draw(screen)
 
-    def update(self):
+    def update(self, player):
         self.clock.tick(80)
 
         if self.move_count > 0:
             self.move_count -= 1
-            if self.angle == 0:
-                self.rect.y += 2
-            elif self.angle == 90:
-                self.rect.x -= 2
-            elif self.angle == 180:
-                self.rect.y -= 2
-            elif self.angle == 270:
-                self.rect.x += 2
+            self.move_in_current_direction()
         else:
             self.choose_new_direction()
 
-        # Boundary checks
-        if self.rect.left < 0:
-            self.rect.left = 0
-            self.move_count = 0
-        elif self.rect.right > 800:
-            self.rect.right = 800
-            self.move_count = 0
-        if self.rect.top < 0:
-            self.rect.top = 0
-            self.move_count = 0
-        elif self.rect.bottom > 600:
-            self.rect.bottom = 600
-            self.move_count = 0
+        self.shoot(player)
 
-        if self.collidelist() != -1:
-            self.move_count = 0
+        # Update bullets
+        for bullet in self.bullets[:]:
+            bullet.update()
+            if bullet.off_screen(800, 600):
+                self.bullets.remove(bullet)
+
+        # Boundary checks
+        self.check_boundaries()
+
+    def move_in_current_direction(self):
+        if self.angle == 0:
+            self.rect.y += 1
+        elif self.angle == 90:
+            self.rect.x -= 1
+        elif self.angle == 180:
+            self.rect.y -= 1
+        elif self.angle == 270:
+            self.rect.x += 1
 
     def choose_new_direction(self):
         self.move_count = random.randint(20, 60) 
@@ -73,5 +80,49 @@ class Enemy:
         old_center = self.rect.center
         self.rect = self.image.get_rect(center=old_center)
 
+    def check_boundaries(self):
+        if self.rect.left < 0:
+            self.rect.left = 0
+            self.move_count = 0
+        elif self.rect.right > 800:
+            self.rect.right = 800
+            self.move_count = 0
+        if self.rect.top < 0:
+            self.rect.top = 0
+            self.move_count = 0
+        elif self.rect.bottom > 600:
+            self.rect.bottom = 600
+            self.move_count = 0
+
     def collidelist(self):
         return -1  
+
+    def shoot(self, player):
+        # Check the distance between the player and the enemy
+        player_distance = self.get_distance_to_player(player)
+        
+        if player_distance <= self.shoot_range:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.last_shot_time > self.shoot_delay:
+                bullet_direction = self.get_bullet_direction()
+                bullet = Bullet(self.rect.centerx, self.rect.centery, 3, bullet_direction, 'images/yellow_bullet.png')
+                self.bullets.append(bullet)
+                self.last_shot_time = current_time
+
+    def get_bullet_direction(self):
+        if self.angle == 0:
+            return 'down'
+        elif self.angle == 90:
+            return 'left'
+        elif self.angle == 180:
+            return 'up'
+        elif self.angle == 270:
+            return 'right'
+        
+    def get_distance_to_player(self, player):
+        # Calculate the distance to the player
+        enemy_center = self.rect.center
+        player_center = player.rect.center
+        distance = math.sqrt((enemy_center[0] - player_center[0]) ** 2 + 
+                             (enemy_center[1] - player_center[1]) ** 2)
+        return distance
