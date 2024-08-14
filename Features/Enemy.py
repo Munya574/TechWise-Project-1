@@ -3,6 +3,7 @@ import random
 from Bullets import Bullet
 from Tank import Player
 import math
+import aStar
 
 class Enemy:
     def __init__(self):
@@ -25,6 +26,9 @@ class Enemy:
         self.shoot_delay = 800
         self.last_shot_time = pygame.time.get_ticks()
         self.shoot_range = 200 # Distance to player
+
+        self.grid = [[0 for _ in range(20)] for _ in range(15)]  # Example grid, 0 = walkable, 1 = obstacle
+        self.path = []
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -50,6 +54,16 @@ class Enemy:
 
         # Boundary checks
         self.check_boundaries()
+
+        if not self.path:
+            start_node = aStar.Node(self.rect.x // 50, self.rect.y // 50)  # Assuming each grid cell is 50x50 pixels
+            end_node = aStar.Node(player.rect.x // 50, player.rect.y // 50)
+            self.path = aStar.a_star(start_node, end_node, self.grid)
+
+        if self.path:
+            next_move = self.path.pop(0)
+            self.rect.x = next_move[0] * 50
+            self.rect.y = next_move[1] * 50
 
     def move_in_current_direction(self):
         if self.angle == 0:
