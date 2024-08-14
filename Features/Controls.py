@@ -6,9 +6,13 @@ class InputManager:
         self.player = player
         self.bullets = bullets
         self.bullet_image_path = 'images/yellow_bullet.png'
-        self.space_pressed = False
+        self.shot_sound = pygame.mixer.Sound('sounds/shot.wav')
+
+        self.shot_sound.set_volume(.5)
 
     def handle_input(self, keys):
+        moving = False
+
         if keys[pygame.K_LEFT]:
             self.player.set_direction('left')
             self.player.move()
@@ -21,11 +25,11 @@ class InputManager:
         elif keys[pygame.K_DOWN]:
             self.player.set_direction('down')
             self.player.move()
-        
         if keys[pygame.K_SPACE]:
             if not self.space_pressed:
                 self.shoot()
                 self.space_pressed = True
+                self.shot_sound.play()
         else:
             self.space_pressed = False
 
