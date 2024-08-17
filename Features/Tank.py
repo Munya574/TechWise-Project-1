@@ -1,6 +1,7 @@
 import pygame
 import math
 
+objects = []
 class Player:
     def __init__(self):
         self.image = pygame.image.load('images/pic.png')
@@ -29,6 +30,7 @@ class Player:
         self.direction = direction
 
     def move(self):
+        oldX, oldY = self.rect.center #save it's old position, if tank collides with obstacles it will return to old space
         if self.direction == 'up':
             self.rect.y -= self.speed
         elif self.direction == 'down':
@@ -37,3 +39,7 @@ class Player:
             self.rect.x -= self.speed
         elif self.direction == 'right':
             self.rect.x += self.speed
+            
+        for obj in objects: #collision check of player with obstacles
+            if obj != self and self.rect.colliderect(obj.rect):
+                self.rect.topleft = oldX, oldY
