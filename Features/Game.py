@@ -3,6 +3,7 @@ from Tank import Player
 from Bullets import Bullet
 from Controls import InputManager
 from Enemy import Enemy
+from Graphics import Block
 
 class Game:
     def __init__(self):
