@@ -3,7 +3,7 @@ from Tank import Player
 from Bullets import Bullet
 from Controls import InputManager
 from Enemy import Enemy
-from Graphics import Block
+from Graphics import Block, objects  # Import Block and objects list
 
 class Game:
     def __init__(self):
@@ -32,9 +32,14 @@ class Game:
             
             self.enemy.update(self.player)
             self.check_collisions()
+
             self.screen.fill((0, 0, 0))
             self.player.draw(self.screen)
             self.enemy.draw(self.screen)
+
+            # Draw the Block objects
+            for block in objects:
+                block.draw()
 
             self.update_bullets(self.player_bullets, self.enemy)
             self.update_bullets(self.enemy_bullets, self.player)
@@ -58,14 +63,28 @@ class Game:
             bullet.draw(self.screen)
     
     def check_collisions(self):
-        if self.player.rect.colliderect(self.enemy.rect):
-            game_over_text = self.font.render('Game Over', True, (255, 255, 255))
-            self.screen.blit(game_over_text, (260, 250))
+        # Check for player collision with enemy
+        self.player.rect.colliderect(self.enemy.rect)
+            #self.display_game_over()
 
-            pygame.display.flip()
-            pygame.time.wait(2000)
-            pygame.quit()
-            raise SystemExit
+        # Check for player collision with Blocks
+        for block in objects:
+            self.player.rect.colliderect(block.rect)
+                 #self.display_game_over()
+
+        # Check for enemy collision with Blocks
+        for block in objects:
+            self.enemy.rect.colliderect(block.rect)
+                #self.display_game_over()
+
+    #def display_game_over(self):
+        #game_over_text = self.font.render('Game Over', True, (255, 255, 255))
+        #self.screen.blit(game_over_text, (260, 250))
+
+        #pygame.display.flip()
+        #pygame.time.wait(2000)
+    #pygame.quit()
+    #raise SystemExit
 
 if __name__ == '__main__':
     game = Game()
