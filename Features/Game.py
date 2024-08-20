@@ -63,6 +63,11 @@ class Game:
             bullet.draw(self.screen)
     
     def check_collisions(self):
+        print(self.player.rect.collidelist(objects))
+        # oldX, oldY = self.rect.center
+        if not self.player.rect.collidelist(objects) == -1 :
+            self.player.rect.topleft = self.player.rect.center  
+        
         # Check for player collision with enemy
         self.player.rect.colliderect(self.enemy.rect)
             #self.display_game_over()
