@@ -28,7 +28,8 @@ class Block:
     
     def damage (self, value):
        self.hp -= value
-       if self.hp <= 0: objects.pygame.sprite.remove(self)
+       if self.hp <= 0: 
+           objects.remove(self)
        
 objects = []
 
@@ -40,8 +41,10 @@ for _ in range (50):
         rect = pygame.Rect(x, y, TILE, TILE) 
         fined = False
         for obj in objects:
-            if rect.colliderect(obj.rect): fined =True
+            if rect.colliderect(obj.rect): 
+                fined =True
             
-        if not fined: break
+        if not fined: 
+            break
     Block(x, y, TILE) 
     
