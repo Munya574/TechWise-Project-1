@@ -63,24 +63,45 @@ class Game:
             bullet.draw(self.screen)
     
     def check_collisions(self):
-        print(self.player.rect.collidelist(objects))
-        # oldX, oldY = self.rect.center
-        if not self.player.rect.collidelist(objects) == -1 :
-            self.player.rect.topleft = self.player.rect.center  
-        
-        # Check for player collision with enemy
-        self.player.rect.colliderect(self.enemy.rect)
-            #self.display_game_over()
-
-        # Check for player collision with Blocks
+        # Handle player collision with blocks
         for block in objects:
-            self.player.rect.colliderect(block.rect)
-                 #self.display_game_over()
+            if self.player.rect.colliderect(block.rect):
+                self.handle_player_block_collision(block)
 
-        # Check for enemy collision with Blocks
+        # Handle enemy collision with blocks
         for block in objects:
-            self.enemy.rect.colliderect(block.rect)
-                #self.display_game_over()
+            if self.enemy.rect.colliderect(block.rect):
+                self.handle_enemy_block_collision(block)
+
+        # Handle player collision with enemy
+        if self.player.rect.colliderect(self.enemy.rect):
+            self.handle_player_enemy_collision()
+
+    def handle_player_block_collision(self, block):
+        # Adjust player's position based on the collision with a block
+        if self.player.direction == 'up':
+            self.player.rect.top = block.rect.bottom
+        elif self.player.direction == 'down':
+            self.player.rect.bottom = block.rect.top
+        elif self.player.direction == 'left':
+            self.player.rect.left = block.rect.right
+        elif self.player.direction == 'right':
+            self.player.rect.right = block.rect.left
+
+    def handle_enemy_block_collision(self, block):
+        # Adjust enemy's position based on the collision with a block
+        if self.enemy.angle == 0:  # Moving down
+            self.enemy.rect.bottom = block.rect.top
+        elif self.enemy.angle == 90:  # Moving left
+            self.enemy.rect.left = block.rect.right
+        elif self.enemy.angle == 180:  # Moving up
+            self.enemy.rect.top = block.rect.bottom
+        elif self.enemy.angle == 270:  # Moving right
+            self.enemy.rect.right = block.rect.left
+
+
+    def handle_player_enemy_collision(self):
+        pass
 
     #def display_game_over(self):
         #game_over_text = self.font.render('Game Over', True, (255, 255, 255))

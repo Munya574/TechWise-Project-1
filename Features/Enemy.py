@@ -46,7 +46,7 @@ class Enemy:
 
         self.shoot(player)
 
-        # Update bullets
+        # Update bullets in game screen
         for bullet in self.bullets[:]:
             bullet.update()
             if bullet.off_screen(800, 600):
@@ -108,8 +108,8 @@ class Enemy:
             self.rect.bottom = 600
             self.move_count = 0
 
-    def collidelist(self):
-        return -1  
+    # def collidelist(self):
+    #     return -1  
 
     def shoot(self, player):
         # Check the distance between the player and the enemy
