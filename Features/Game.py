@@ -55,9 +55,16 @@ class Game:
             bullet.update()
             if bullet.off_screen(self.width, self.height):
                 bullets.remove(bullet)
-            elif bullet.collides_with(target):
-                bullets.remove(bullet)
-                # Add damage to target here
+            else:
+                # Check for collision with blocks
+                for block in objects:
+                    if bullet.rect.colliderect(block.rect):
+                        bullets.remove(bullet)
+                        break  # No need to check other blocks once bullet is removed
+
+                # Check for collision with target (player or enemy)
+                if bullet in bullets and bullet.collides_with(target):
+                    bullets.remove(bullet)
 
         for bullet in bullets:
             bullet.draw(self.screen)
