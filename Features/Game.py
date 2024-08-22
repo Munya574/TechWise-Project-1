@@ -108,16 +108,18 @@ class Game:
 
 
     def handle_player_enemy_collision(self):
+        #self.display_game_over()
         pass
+        
 
-    #def display_game_over(self):
-        #game_over_text = self.font.render('Game Over', True, (255, 255, 255))
-        #self.screen.blit(game_over_text, (260, 250))
+    # def display_game_over(self):
+    #     game_over_text = self.font.render('Game Over', True, (255, 255, 255))
+    #     self.screen.blit(game_over_text, (260, 250))
 
-        #pygame.display.flip()
-        #pygame.time.wait(2000)
-    #pygame.quit()
-    #raise SystemExit
+    #     pygame.display.flip()
+    #     pygame.time.wait(2000)
+    #     pygame.quit()
+    #     raise SystemExit
 
 if __name__ == '__main__':
     game = Game()
