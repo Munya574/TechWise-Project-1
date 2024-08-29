@@ -21,7 +21,7 @@ class Game:
         self.input_manager = InputManager(self.player, self.player_bullets)
         self.font = pygame.font.Font(None, 74)
         self.reset_game()
-        #self.player_hits = 0
+        self.player_hits = 0
         
     def reset_game(self):
         # Reinitialize game state
