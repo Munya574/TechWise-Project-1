@@ -21,7 +21,7 @@ class Game:
         self.input_manager = InputManager(self.player, self.player_bullets)
         self.font = pygame.font.Font(None, 74)
         self.reset_game()
-        self.player_hits = 0
+        #self.player_hits = 0
         
     def reset_game(self):
         # Reinitialize game state
@@ -31,6 +31,7 @@ class Game:
         self.enemy_bullets = []
         self.input_manager = InputManager(self.player, self.player_bullets)
         self.player_hits = 0
+
     def run(self):
         running = True
         while running:
@@ -81,31 +82,37 @@ class Game:
         if not isinstance(targets, list):
             targets = [targets]
 
+        bullets_to_remove = []
+
         for bullet in bullets[:]:
             bullet.update()
             if bullet.off_screen(self.width, self.height):
-                bullets.remove(bullet)
+                bullets_to_remove.append(bullet)
             else:
-                # Check for collision with blocks
+            # Check for collision with blocks
                 for block in objects:
                     if bullet.rect.colliderect(block.rect):
-                        bullets.remove(bullet)
+                        bullets_to_remove.append(bullet)
                         break  # No need to check other blocks once bullet is removed
 
-                # Check for collision with the enemy
+            # Check for collision with targets
                 for target in targets:
                     if bullet.collides_with(target):
-                        bullets.remove(bullet)
+                        bullets_to_remove.append(bullet)
                         if isinstance(target, Enemy):
                             self.handle_enemy_explosion(target)
                             if target in self.enemies:
                                 self.enemies.remove(target)
-                        break
+                        elif isinstance(target, Player):
+                            self.player_hits += 1
+                        break  # No need to check other targets once bullet is removed
 
-                if isinstance(targets[0], Player):
-                    if bullet.collides_with(self.player):
-                       # bullets.remove(bullet)
-                        self.player_hits += 1
+    # Remove bullets that need to be removed
+        for bullet in bullets_to_remove:
+            if bullet in bullets:
+                bullets.remove(bullet)
+
+    # Draw the remaining bullets
         for bullet in bullets:
             bullet.draw(self.screen)
     
